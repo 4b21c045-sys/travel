@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>探險天地 - 旅遊預訂網站</title>
+    <style>
+        :root {
+            --color-primary: #208091;
+            --color-primary-hover: #1a6673;
+            --color-accent: #e67e22;
+            --color-text: #1f2121;
+            --color-text-light: #626c7d;
+            --color-bg: #fafaf9;
+            --color-surface: #ffffff;
+            --color-border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+        }
+
+        /* 導航欄 */
+        .navbar {
+            background: var(--color-surface);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex: 1;
+            margin: 0 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--color-text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background: var(--color-bg);
+            color: var(--color-primary);
+        }
+
+        .nav-btn {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--color-primary-hover);
+        }
+
+        /* 英雄區 */
+        .hero {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #1a6673 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .search-form {
+            background: var(--color-surface);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group input {
+            padding: 0.8rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .search-btn {
+            grid-column: 1 / -1;
+            background: var(--color-accent);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #d35400;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 精選區 */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: var(--color-primary);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--color-surface);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+        }
+
+        .card-desc {
+            color: var(--color-text-light);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .card-price {
+            font-size: 1.2rem;
+            color: var(--color-accent);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .card-btn {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .card-btn:hover {
+            background: var(--color-primary-hover);
+        }
+
+        /* 分類導航 */
+        .category-nav {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            border-color: var(--color-primary);
+            box-shadow: 0 4px 12px rgba(32, 128, 145, 0.2);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-name {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        /* 評價區 */
+        .testimonial {
+            background: var(--color-surface);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stars {
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .testimonial-text {
+            margin-bottom: 1rem;
+            font-style: italic;
+            color: var(--color-text-light);
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        /* 訂閱區 */
+        .newsletter {
+            background: linear-gradient(135deg, var(--color-primary), #1a6673);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 1.5rem auto 0;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .newsletter-btn {
+            background: var(--color-accent);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .newsletter-btn:hover {
+            background: #d35400;
+        }
+
+        /* 頁尾 */
+        .footer {
+            background: #1f2121;
+            color: #e5e7eb;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col a {
+            color: #e5e7eb;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #404040;
+            padding-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+
+            .category-nav {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 導航欄 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">✈️ 探險天地</div>
+            <div class="nav-menu">
+                <a href="#destinations">目的地</a>
+                <a href="#packages">套餐</a>
+                <a href="#activities">活動</a>
+                <a href="#accommodations">住宿</a>
+                <a href="#blog">部落格</a>
+            </div>
+            <button class="nav-btn">登入/註冊</button>
+        </div>
+    </nav>
+
+    <!-- 英雄區 -->
+    <section class="hero">
+        <h1>探索世界的奇蹟</h1>
+        <p>發現獨特的旅遊體驗，創造終生難忘的回憶</p>
+        
+        <div class="search-form">
+            <div class="form-group">
+                <input type="text" placeholder="出發地點" required>
+                <input type="text" placeholder="目的地" required>
+            </div>
+            <div class="form-group">
+                <input type="date" required>
+                <input type="number" placeholder="旅客人數" min="1" max="10" required>
+            </div>
+            <button class="search-btn">🔍 搜尋旅程</button>
+        </div>
+    </section>
+
+    <!-- 10個頁面分類 -->
+    <section class="section container">
+        <h2 class="section-title">網站分類導覽</h2>
+        <div class="category-nav">
+            <div class="category-card">
+                <div class="category-icon">🏠</div>
+                <div class="category-name">首頁</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">🗺️</div>
+                <div class="category-name">目的地</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">📅</div>
+                <div class="category-name">套餐</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">🎯</div>
+                <div class="category-name">活動</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">🏨</div>
+                <div class="category-name">住宿</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">✈️</div>
+                <div class="category-name">交通</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">📝</div>
+                <div class="category-name">部落格</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">💳</div>
+                <div class="category-name">預訂</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">👤</div>
+                <div class="category-name">帳戶</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">📞</div>
+                <div class="category-name">聯繫</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 精選目的地 -->
+    <section class="section container">
+        <h2 class="section-title">✨ 精選目的地</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-image">🏔️</div>
+                <div class="card-content">
+                    <h3 class="card-title">日本京都</h3>
+                    <p class="card-desc">傳統文化與現代融合的完美結合</p>
+                    <div class="card-price">NT$12,999 起</div>
+                    <button class="card-btn">瞭解詳情</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">🏖️</div>
+                <div class="card-content">
+                    <h3 class="card-title">泰國普吉</h3>
+                    <p class="card-desc">陽光沙灘與熱帶天堂</p>
+                    <div class="card-price">NT$8,999 起</div>
+                    <button class="card-btn">瞭解詳情</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">🗼</div>
+                <div class="card-content">
+                    <h3 class="card-title">法國巴黎</h3>
+                    <p class="card-desc">浪漫之都的藝術與美食</p>
+                    <div class="card-price">NT$15,999 起</div>
+                    <button class="card-btn">瞭解詳情</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">🏜️</div>
+                <div class="card-content">
+                    <h3 class="card-title">埃及開羅</h3>
+                    <p class="card-desc">古文明的神秘寶藏</p>
+                    <div class="card-price">NT$11,999 起</div>
+                    <button class="card-btn">瞭解詳情</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">🏝️</div>
+                <div class="card-content">
+                    <h3 class="card-title">馬爾地夫</h3>
+                    <p class="card-desc">海中天堂般的渡假勝地</p>
+                    <div class="card-price">NT$14,999 起</div>
+                    <button class="card-btn">瞭解詳情</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">🗽</div>
+                <div class="card-content">
+                    <h3 class="card-title">美國紐約</h3>
+                    <p class="card-desc">不夜城的繁華與活力</p>
+                    <div class="card-price">NT$13,999 起</div>
+                    <button class="card-btn">瞭解詳情</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 熱門套餐 -->
+    <section class="section container" style="background: var(--color-bg);">
+        <h2 class="section-title">🔥 熱門旅遊套餐</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-image">🌏</div>
+                <div class="card-content">
+                    <h3 class="card-title">東南亞5日遊</h3>
+                    <p class="card-desc">✈️ 包含班機 | 🏨 4晚飯店 | 🍽️ 每日早餐</p>
+                    <div class="card-price">NT$7,999</div>
+                    <button class="card-btn">立即預訂</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">🎭</div>
+                <div class="card-content">
+                    <h3 class="card-title">歐洲10日遊</h3>
+                    <p class="card-desc">✈️ 包含班機 | 🏨 9晚飯店 | 🗺️ 導遊</p>
+                    <div class="card-price">NT$22,999</div>
+                    <button class="card-btn">立即預訂</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">🎄</div>
+                <div class="card-content">
+                    <h3 class="card-title">日本7日遊</h3>
+                    <p class="card-desc">✈️ 包含班機 | 🏨 6晚飯店 | 🚄 JR通票</p>
+                    <div class="card-price">NT$18,999</div>
+                    <button class="card-btn">立即預訂</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 客戶評價 -->
+    <section class="section container">
+        <h2 class="section-title">⭐ 客戶評價</h2>
+        <div class="cards-grid">
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">&quot;這次旅程超棒！服務周到，行程安排完美。強烈推薦！&quot;</p>
+                <div class="testimonial-author">李小姐</div>
+            </div>
+
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">&quot;物超所值，導遊很專業，飯店舒適，會再來預訂。&quot;</p>
+                <div class="testimonial-author">王先生</div>
+            </div>
+
+            <div class="testimonial">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">&quot;客服支援很快速，行程無懈可擊。整體體驗五顆星！&quot;</p>
+                <div class="testimonial-author">陳家庭</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 訂閱區 -->
+    <section class="newsletter">
+        <div class="container">
+            <h2 style="margin-bottom: 0.5rem;">訂閱我們的電子報</h2>
+            <p>獲得最新的旅遊優惠和行程推薦</p>
+            <div class="newsletter-form">
+                <input type="email" placeholder="輸入您的信箱" required>
+                <button class="newsletter-btn">訂閱</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁尾 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>關於我們</h4>
+                <a href="#">公司簡介</a>
+                <a href="#">聯繫方式</a>
+                <a href="#">招聘機會</a>
+            </div>
+            <div class="footer-col">
+                <h4>旅遊分類</h4>
+                <a href="#">目的地</a>
+                <a href="#">套餐</a>
+                <a href="#">活動</a>
+                <a href="#">住宿</a>
+            </div>
+            <div class="footer-col">
+                <h4>支援服務</h4>
+                <a href="#">FAQ</a>
+                <a href="#">客服中心</a>
+                <a href="#">預訂狀態</a>
+                <a href="#">取消政策</a>
+            </div>
+            <div class="footer-col">
+                <h4>社群媒體</h4>
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">YouTube</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 探險天地旅遊。版權所有。| <a href="#" style="color: inherit;">隱私政策</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // 簡單的互動功能
+        document.querySelectorAll('.card-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('感謝您的興趣！這是演示版本。');
+            });
+        });
+
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const name = this.querySelector('.category-name').textContent;
+                console.log('導航到: ' + name);
+            });
+        });
+
+        document.querySelector('.newsletter-btn').addEventListener('click', function() {
+            const email = document.querySelector('.newsletter-form input').value;
+            if(email) {
+                alert('感謝訂閱！電子報將寄送到 ' + email);
+                document.querySelector('.newsletter-form input').value = '';
+            }
+        });
+
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            alert('搜尋功能（演示版本）');
+        });
+    </script>
+</body>
+</html>
